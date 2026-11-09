@@ -1,0 +1,6 @@
+<?php
+namespace App\Http\Controllers;
+use App\Models\Booking; use App\Models\Enquiry; use App\Models\Quote; use App\Support\Workspace; use Illuminate\Http\Request;
+class DashboardController extends Controller {
+    public function __invoke(Request $request) { $business=Workspace::business($request); $base=Enquiry::where('business_id',$business->id); $new=(clone $base)->where('status','new')->count(); $awaiting=(clone $base)->whereIn('status',['new','replied'])->count(); $quotes=Quote::where('business_id',$business->id); $pending=(clone $quotes)->where('status','sent')->count(); $accepted=(clone $quotes)->where('status','accepted')->count(); $bookings=Booking::where('business_id',$business->id); $booked=(clone $bookings)->where('starts_at','>=',now())->count(); $total=(clone $base)->count(); return view('dashboard',compact('business','new','awaiting','pending','accepted','booked','total'))->with(['conversion'=>$total?round(($accepted/$total)*100):0,'estimatedRevenue'=>(clone $bookings)->whereIn('status',['scheduled','completed'])->sum('estimated_total'),'followUps'=>(clone $base)->whereNotNull('follow_up_at')->where('follow_up_at','<=',now())->count(),'upcoming'=>(clone $bookings)->with(['customer','service','assignee'])->where('starts_at','>=',now())->orderBy('starts_at')->limit(5)->get()]); }
+}

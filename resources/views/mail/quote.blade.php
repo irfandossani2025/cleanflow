@@ -1,0 +1,1 @@
+<p>{!! nl2br(e($body)) !!}</p><p><a href="{{ $url }}">Review your quote securely</a></p><p>This quote expires {{ $quote->expires_at?->format('j M Y') }}. Please use the link to accept, decline, or request changes.</p>

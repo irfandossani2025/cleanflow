@@ -1,0 +1,1 @@
+<x-app-layout><div class="narrow form-card"><p class="eyebrow">ONE LAST STEP</p><h1>Verify your email</h1><p>We sent a verification link to your email address. Verify it to protect your business workspace.</p><form method="POST" action="{{ route('verification.send') }}">@csrf<button class="button secondary">Send another link</button></form></div></x-app-layout>

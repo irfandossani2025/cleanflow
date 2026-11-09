@@ -1,0 +1,4 @@
+<?php
+namespace App\Http\Controllers;
+use App\Support\Workspace; use Illuminate\Http\Request; use Illuminate\Support\Facades\Hash; use Illuminate\Auth\Events\Registered;
+class StaffController extends Controller { public function index(Request $request) { $business=Workspace::business($request); return view('staff.index',['business'=>$business,'staff'=>$business->users()->orderBy('name')->get()]); } public function store(Request $request) { $b=Workspace::business($request); $data=$request->validate(['name'=>'required|string|max:120','email'=>'required|email|unique:users,email','password'=>'required|min:10|confirmed','role'=>'required|in:admin,staff']); $user=$b->users()->create($data+['password'=>Hash::make($data['password'])]); event(new Registered($user)); return back()->with('status','Staff account created. A verification email has been sent.'); } }

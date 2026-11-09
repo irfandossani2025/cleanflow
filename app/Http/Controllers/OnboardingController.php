@@ -1,0 +1,7 @@
+<?php
+namespace App\Http\Controllers;
+use App\Models\Service; use App\Support\Workspace; use Illuminate\Http\Request;
+class OnboardingController extends Controller {
+    public function show(Request $request) { return view('onboarding.show',['business'=>Workspace::business($request)]); }
+    public function update(Request $request) { $business=Workspace::business($request); $data=$request->validate(['name'=>'required|string|max:160','email'=>'nullable|email','phone'=>'nullable|string|max:50','address'=>'nullable|string|max:2000','country'=>'nullable|string|size:2','timezone'=>'required|timezone','locale'=>'required|string|max:12','currency'=>'required|string|size:3','service_area'=>'nullable|string|max:2000','quote_terms'=>'nullable|string|max:5000','quote_email_template'=>'nullable|string|max:5000','quote_expiry_days'=>'required|integer|min:1|max:365','service_name'=>'nullable|string|max:120','service_price'=>'nullable|numeric|min:0','service_duration'=>'nullable|integer|min:15|max:1440']); $business->update(collect($data)->except(['service_name','service_price','service_duration'])->all()+['onboarding_completed'=>true]); if ($data['service_name']??null) Service::firstOrCreate(['business_id'=>$business->id,'name'=>$data['service_name']],['base_price'=>$data['service_price']??0,'duration_minutes'=>$data['service_duration']??60]); return redirect()->route('dashboard')->with('status','Your workspace is ready. You can refine these settings at any time.'); }
+}
