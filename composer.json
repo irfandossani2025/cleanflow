@@ -48,6 +48,13 @@
             "@php artisan config:clear --ansi",
             "@php artisan test"
         ],
+        "cleanflow:deploy": [
+            "@php artisan migrate --force --seed --ansi",
+            "@php artisan optimize:clear --ansi",
+            "@php artisan config:cache --ansi",
+            "@php artisan route:cache --ansi",
+            "@php artisan view:cache --ansi"
+        ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
