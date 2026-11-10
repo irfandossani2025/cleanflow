@@ -11,7 +11,9 @@ return new class extends Migration {
             $table->id(); $table->string('name'); $table->string('slug')->unique(); $table->string('email')->nullable(); $table->string('phone')->nullable(); $table->text('address')->nullable();
             $table->string('country', 2)->nullable(); $table->string('timezone')->default('UTC'); $table->string('locale')->default('en'); $table->string('currency', 3)->default('USD');
             $table->string('logo_path')->nullable(); $table->text('service_area')->nullable(); $table->text('quote_terms')->nullable(); $table->unsignedSmallInteger('quote_expiry_days')->default(14);
-            $table->json('working_hours')->nullable(); $table->text('quote_email_template')->nullable(); $table->boolean('onboarding_completed')->default(false); $table->timestamps();
+            // MariaDB 10.1 used by some Plesk hosts has no native JSON type.
+            // Eloquent still serializes/deserializes these text columns via casts.
+            $table->text('working_hours')->nullable(); $table->text('quote_email_template')->nullable(); $table->boolean('onboarding_completed')->default(false); $table->timestamps();
         });
         Schema::table('users', function (Blueprint $table) { $table->foreign('business_id')->references('id')->on('businesses')->nullOnDelete(); });
         Schema::create('services', function (Blueprint $table) {
@@ -30,7 +32,7 @@ return new class extends Migration {
             $table->unsignedInteger('bedrooms')->nullable(); $table->unsignedInteger('bathrooms')->nullable(); $table->date('preferred_date')->nullable(); $table->text('notes')->nullable(); $table->timestamp('received_at')->useCurrent(); $table->timestamp('follow_up_at')->nullable()->index(); $table->timestamps();
         });
         Schema::create('activity_logs', function (Blueprint $table) {
-            $table->id(); $table->foreignId('business_id')->constrained()->cascadeOnDelete(); $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete(); $table->morphs('subject'); $table->string('action'); $table->json('properties')->nullable(); $table->timestamps();
+            $table->id(); $table->foreignId('business_id')->constrained()->cascadeOnDelete(); $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete(); $table->morphs('subject'); $table->string('action'); $table->text('properties')->nullable(); $table->timestamps();
         });
     }
     public function down(): void { Schema::dropIfExists('activity_logs'); Schema::dropIfExists('enquiries'); Schema::dropIfExists('customers'); Schema::dropIfExists('service_extras'); Schema::dropIfExists('services'); Schema::table('users', fn (Blueprint $table) => $table->dropForeign(['business_id'])); Schema::dropIfExists('businesses'); }
