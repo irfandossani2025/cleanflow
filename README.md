@@ -62,15 +62,15 @@ Email delivery is unverified until SMTP configuration and a real mailbox test ar
 
 ### Sandbox
 
-1. Create a Sandbox product and monthly billing plans in PayPal Developer.
-2. Store the resulting ID in the matching `subscription_plans.paypal_plan_id` record. Its price/currency must match the PayPal plan.
+1. Create one Sandbox product named `CleanFlow`, then create two billing plans under it: **US$15.00 every month** and **US$144.00 every year**. The annual plan is the approved 20% discount against twelve monthly payments.
+2. In Plesk, set `PAYPAL_MODE=sandbox`, `PAYPAL_BASE_URL=https://api-m.sandbox.paypal.com`, `PAYPAL_CLIENT_ID`, `PAYPAL_SECRET`, `PAYPAL_WEBHOOK_ID`, `PAYPAL_CLEANFLOW_MONTHLY_PLAN_ID`, and `PAYPAL_CLEANFLOW_YEARLY_PLAN_ID`. Plan IDs belong in Plesk environment configuration and must not be committed.
 3. In Plesk, set `PAYPAL_MODE=sandbox`, `PAYPAL_BASE_URL=https://api-m.sandbox.paypal.com`, `PAYPAL_CLIENT_ID`, `PAYPAL_SECRET`, and `PAYPAL_WEBHOOK_ID`.
 4. Register `https://YOUR-APP-URL/webhooks/paypal` for billing subscription lifecycle events (activation, cancellation, suspension, expiry, and payment failure).
 5. Test with a Sandbox buyer. A browser return is only a return: access changes after trusted PayPal verification/webhook processing.
 
 ### Live mode
 
-Create separate live PayPal products/plans/webhook. Replace Plesk environment values and database plan IDs, set `PAYPAL_BASE_URL=https://api-m.paypal.com`, verify HTTPS delivery, then enable plans. Do not reuse Sandbox IDs or enable live billing before an end-to-end approval and webhook test.
+Create separate live PayPal products/plans/webhook. Replace the Plesk environment values (including both plan IDs), set `PAYPAL_BASE_URL=https://api-m.paypal.com`, verify HTTPS delivery, then enable plans. Do not reuse Sandbox IDs or enable live billing before an end-to-end approval and webhook test.
 
 ## Boundaries and security
 

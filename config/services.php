@@ -28,6 +28,10 @@ return [
         'secret' => env('PAYPAL_SECRET'),
         'webhook_id' => env('PAYPAL_WEBHOOK_ID'),
         'base_url' => env('PAYPAL_BASE_URL', 'https://api-m.sandbox.paypal.com'),
+        'plan_ids' => [
+            'cleanflow-monthly' => env('PAYPAL_CLEANFLOW_MONTHLY_PLAN_ID'),
+            'cleanflow-yearly' => env('PAYPAL_CLEANFLOW_YEARLY_PLAN_ID'),
+        ],
     ],
 
     'ses' => [
