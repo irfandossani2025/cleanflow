@@ -55,6 +55,9 @@
             "@php artisan route:cache --ansi",
             "@php artisan view:cache --ansi"
         ],
+        "post-install-cmd": [
+            "@cleanflow:deploy"
+        ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
