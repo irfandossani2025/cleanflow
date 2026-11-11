@@ -28,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
         // columns are limited to 767 bytes (common on shared Plesk hosting).
         Schema::defaultStringLength(191);
         RateLimiter::for('public-form', fn (Request $request) => Limit::perMinute(6)->by($request->ip()));
+        RateLimiter::for('demo', fn (Request $request) => Limit::perMinute(12)->by($request->ip()));
         Gate::define('manage-business', fn ($user) => $user->canManageBusiness());
         Gate::define('view-platform-status', fn ($user) => (bool) $user->is_platform_admin);
     }

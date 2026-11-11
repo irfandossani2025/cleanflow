@@ -53,5 +53,6 @@ class User extends Authenticatable implements MustVerifyEmail
     public function business() { return $this->belongsTo(Business::class); }
     public function assignedBookings() { return $this->hasMany(Booking::class, 'assigned_user_id'); }
     public function isOwner(): bool { return $this->role === 'owner'; }
+    public function isDemo(): bool { return $this->email === 'demo@cleanflow.invalid' && $this->business?->slug === 'cleanflow-demo'; }
     public function canManageBusiness(): bool { return $this->is_platform_admin || in_array($this->role, ['owner', 'admin'], true); }
 }
